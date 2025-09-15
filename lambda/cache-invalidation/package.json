@@ -1,0 +1,18 @@
+{
+  "name": "cache-invalidation",
+  "version": "1.0.0",
+  "description": "Lambda function for CloudFront cache invalidation",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "package": "npm run build && zip -r function.zip index.js node_modules/"
+  },
+  "dependencies": {
+    "@aws-sdk/client-cloudfront": "^3.0.0",
+    "aws-lambda": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "typescript": "^5.0.0"
+  }
+}

@@ -24,7 +24,7 @@ export class S3CloudfrontStack extends cdk.Stack {
     // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, 'WebAppDistribution', {
       defaultBehavior: {
-        origin: new origins.S3BucketOrigin(bucket),
+        origin: new origins.S3Origin(bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       defaultRootObject: 'index.html',

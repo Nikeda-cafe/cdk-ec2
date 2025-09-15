@@ -24,7 +24,7 @@ export class S3CloudfrontStack extends cdk.Stack {
     // CloudFront Distribution
     const distribution = new cloudfront.Distribution(this, 'WebAppDistribution', {
       defaultBehavior: {
-        origin: new origins.S3Origin(bucket),
+        origin: new origins.S3BucketOrigin(bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       defaultRootObject: 'index.html',
@@ -39,7 +39,7 @@ export class S3CloudfrontStack extends cdk.Stack {
 
     // Lambda function for CloudFront cache invalidation
     const cacheInvalidationFunction = new lambda.Function(this, 'CacheInvalidationFunction', {
-      runtime: lambda.Runtime.NODEJS_18_X,
+      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'index.handler',
       code: lambda.Code.fromAsset('lambda/cache-invalidation'),
       environment: {
@@ -60,8 +60,7 @@ export class S3CloudfrontStack extends cdk.Stack {
     // Add S3 event notification to trigger Lambda
     bucket.addEventNotification(
       s3.EventType.OBJECT_CREATED,
-      new s3n.LambdaDestination(cacheInvalidationFunction),
-      { prefix: '' }
+      new s3n.LambdaDestination(cacheInvalidationFunction)
     );
 
     new cdk.CfnOutput(this, 'BucketName', { value: bucket.bucketName });
